@@ -1,0 +1,5 @@
+{
+	"symbol-white-list": [
+		"TYPO3\\CodingStandards\\CsFixerConfig"
+	]
+}
