@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the "php-cs-fixer-preset" Composer package.
  *
- * (c) 2025 Konrad Michalik <hej@konradmichalik.dev>
+ * (c) 2025-2026 Konrad Michalik <hej@konradmichalik.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Rules;
 
 use JsonException;
-use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, Type};
+use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, License, Type};
 use KonradMichalik\PhpCsFixerPreset\Service\ComposerService;
 use RuntimeException;
 use Stringable;
@@ -38,17 +38,24 @@ final readonly class Header implements Rule, Stringable
         public Type $packageType,
         public array $packageAuthors = [],
         public ?CopyrightRange $copyrightRange = null,
+        public ?License $license = null,
     ) {}
 
     public function __toString(): string
     {
+        $licenseSection = null !== $this->license && '' !== $this->license->licenseText()
+            ? $this->license->licenseText()
+            : <<<'DEFAULT'
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+DEFAULT;
+
         return trim(<<<HEADER
 This file is part of the "{$this->packageName}" {$this->packageType->value}.
 
 {$this->generateCopyrightLines()}
 
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
+{$licenseSection}
 HEADER
         );
     }
@@ -61,6 +68,7 @@ HEADER
         Type $packageType,
         Author|array $packageAuthors = [],
         ?CopyrightRange $copyrightRange = null,
+        ?License $license = null,
     ): self {
         if (!is_array($packageAuthors)) {
             $packageAuthors = [$packageAuthors];
@@ -71,6 +79,7 @@ HEADER
             $packageType,
             $packageAuthors,
             $copyrightRange,
+            $license,
         );
     }
 
@@ -86,6 +95,7 @@ HEADER
         ?string $packageName = null,
         ?Type $packageType = null,
         ?array $packageAuthors = null,
+        ?License $license = null,
     ): self {
         $data = ComposerService::readComposerJson($composerJsonPath);
 
@@ -110,6 +120,7 @@ HEADER
             $packageType,
             $packageAuthors,
             $copyrightRange,
+            $license,
         );
     }
 

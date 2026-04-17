@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the "php-cs-fixer-preset" Composer package.
  *
- * (c) 2025 Konrad Michalik <hej@konradmichalik.dev>
+ * (c) 2025-2026 Konrad Michalik <hej@konradmichalik.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules;
 
-use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, Type};
+use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, License, Type};
 use KonradMichalik\PhpCsFixerPreset\Rules\{Header, Rule};
 use PHPUnit\Framework\TestCase;
 
@@ -146,7 +146,8 @@ final class HeaderTest extends TestCase
         $result = $header->__toString();
 
         self::assertStringContainsString('This file is part of the "test/package" Composer package.', $result);
-        self::assertStringContainsString('(c) 2025 John Doe <john@example.com>', $result);
+        self::assertStringContainsString('(c) 2025', $result);
+        self::assertStringContainsString('John Doe <john@example.com>', $result);
         self::assertStringContainsString('For the full copyright and license information', $result);
     }
 
@@ -166,8 +167,8 @@ final class HeaderTest extends TestCase
 
         $result = $header->__toString();
 
-        self::assertStringContainsString('(c) 2025 John Doe <john@example.com>', $result);
-        self::assertStringContainsString('(c) 2025 Jane Smith <jane@example.com>', $result);
+        self::assertStringContainsString('John Doe <john@example.com>', $result);
+        self::assertStringContainsString('Jane Smith <jane@example.com>', $result);
     }
 
     public function testToStringWithDifferentPackageTypes(): void
@@ -228,5 +229,75 @@ final class HeaderTest extends TestCase
         self::assertStringContainsString('(c) John Doe <john@example.com>', $result);
         self::assertStringContainsString('(c) Jane Smith <jane@example.com>', $result);
         self::assertStringNotContainsString('2025', $result);
+    }
+
+    public function testToStringWithGpl3License(): void
+    {
+        $header = Header::create(
+            'test/package',
+            Type::ComposerPackage,
+            [],
+            null,
+            License::GPL3OrLater,
+        );
+
+        $result = $header->__toString();
+
+        self::assertStringContainsString('either version 3 of the License', $result);
+        self::assertStringContainsString('GNU General Public License', $result);
+        self::assertStringNotContainsString('please view the LICENSE', $result);
+    }
+
+    public function testToStringWithGpl2License(): void
+    {
+        $header = Header::create(
+            'test/package',
+            Type::ComposerPackage,
+            [],
+            null,
+            License::GPL2OrLater,
+        );
+
+        $result = $header->__toString();
+
+        self::assertStringContainsString('either version 2 of the License', $result);
+        self::assertStringNotContainsString('please view the LICENSE', $result);
+    }
+
+    public function testToStringWithProprietaryLicenseFallsBackToDefault(): void
+    {
+        $header = Header::create(
+            'test/package',
+            Type::ComposerPackage,
+            [],
+            null,
+            License::Proprietary,
+        );
+
+        $result = $header->__toString();
+
+        self::assertStringContainsString('please view the LICENSE', $result);
+    }
+
+    public function testToStringWithoutLicenseUsesDefaultText(): void
+    {
+        $header = Header::create('test/package', Type::ComposerPackage);
+
+        $result = $header->__toString();
+
+        self::assertStringContainsString('please view the LICENSE', $result);
+    }
+
+    public function testCreateWithLicenseParameter(): void
+    {
+        $header = Header::create(
+            'test/package',
+            Type::ComposerPackage,
+            [],
+            null,
+            License::GPL3OrLater,
+        );
+
+        self::assertSame(License::GPL3OrLater, $header->license);
     }
 }

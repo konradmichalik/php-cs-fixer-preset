@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the "php-cs-fixer-preset" Composer package.
  *
- * (c) 2025 Konrad Michalik <hej@konradmichalik.dev>
+ * (c) 2025-2026 Konrad Michalik <hej@konradmichalik.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 use KonradMichalik\PhpCsFixerPreset\Config;
 use KonradMichalik\PhpCsFixerPreset\Rules\Header;
-use KonradMichalik\PhpCsFixerPreset\Rules\Set\Set;
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\RuleSet;
 use KonradMichalik\PhpDocBlockHeaderFixer\Generators\DocBlockHeader;
 use KonradMichalik\PhpDocBlockHeaderFixer\Rules\DocBlockHeaderFixer;
 use Symfony\Component\Finder\Finder;
@@ -26,7 +26,7 @@ return Config::create()
         Header::fromComposer(),
     )
     ->withRule(
-        Set::fromArray(
+        RuleSet::fromArray(
             DocBlockHeader::create(
                 [
                     'author' => 'Konrad Michalik <hej@konradmichalik.dev>',
