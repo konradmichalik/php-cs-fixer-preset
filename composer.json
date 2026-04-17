@@ -3,7 +3,7 @@
 	"description": "Preset configuration for PHP-CS-Fixer",
 	"license": "GPL-3.0-or-later",
 	"type": "library",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"authors": [
 		{
 			"name": "Konrad Michalik",
