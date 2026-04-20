@@ -31,7 +31,7 @@ Configure PHP-CS-Fixer in your `.php-cs-fixer.php` file:
 use KonradMichalik\PhpCsFixerPreset\Config;
 use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, Type};
 use KonradMichalik\PhpCsFixerPreset\Rules\Header;
-use KonradMichalik\PhpCsFixerPreset\Rules\Set\Set;
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\RuleSet;
 use Symfony\Component\Finder\Finder;
 
 return Config::create()
@@ -52,7 +52,7 @@ return Config::create()
     )
     // Custom Rule
     ->withRule(
-        Set::fromArray([
+        RuleSet::fromArray([
             'modernize_types_casting' => true,
         ]),
     )
