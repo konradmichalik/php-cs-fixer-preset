@@ -99,21 +99,13 @@ HEADER
     ): self {
         $data = ComposerService::readComposerJson($composerJsonPath);
 
-        if (null === $packageType) {
-            $packageType = ComposerService::extractPackageType($data);
-        }
+        $packageType ??= ComposerService::extractPackageType($data);
 
-        if (null === $packageName) {
-            $packageName = ComposerService::extractPackageName($data, $packageType);
-        }
+        $packageName ??= ComposerService::extractPackageName($data, $packageType);
 
-        if (null === $packageAuthors) {
-            $packageAuthors = ComposerService::extractAuthors($data);
-        }
+        $packageAuthors ??= ComposerService::extractAuthors($data);
 
-        if (null === $copyrightRange) {
-            $copyrightRange = ComposerService::extractCopyrightRange($data);
-        }
+        $copyrightRange ??= ComposerService::extractCopyrightRange($data);
 
         return new self(
             $packageName,
