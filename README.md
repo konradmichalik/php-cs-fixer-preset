@@ -1,5 +1,7 @@
 <div align="center">
 
+![icon](icon.png)
+
 # PHP-CS-Fixer Preset
 
 [![Coverage](https://img.shields.io/coverallsCoverage/github/konradmichalik/php-cs-fixer-preset?logo=coveralls)](https://coveralls.io/github/konradmichalik/php-cs-fixer-preset)
