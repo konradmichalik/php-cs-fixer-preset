@@ -15,11 +15,17 @@ namespace KonradMichalik\PhpCsFixerPreset;
 
 use KonradMichalik\PhpCsFixerPreset\Rules\Rule;
 use KonradMichalik\PhpCsFixerPreset\Rules\Set\DefaultSet;
-use PhpCsFixer\{ConfigInterface, Runner};
+use PhpCsFixer\Config\RuleCustomisationPolicyAwareConfigInterface;
+use PhpCsFixer\{ConfigInterface, CustomRulesetsAwareConfigInterface, ParallelAwareConfigInterface, Runner};
+use PhpCsFixer\Fixer\FixerInterface;
 use Symfony\Component\Finder\Finder;
 
+use function array_filter;
+use function array_map;
 use function array_replace_recursive;
+use function array_values;
 use function class_exists;
+use function in_array;
 
 /**
  * Config.
@@ -90,12 +96,65 @@ final class Config extends \PhpCsFixer\Config
         return $this;
     }
 
+    /**
+     * Replaces this configuration with the given one, including its rules.
+     * Rules are not merged, so the DefaultSet is dropped. Custom fixers and
+     * rule sets are added to already registered ones.
+     */
     public function withConfig(ConfigInterface $config): self
     {
+        $finder = $config->getFinder();
+        if ($finder instanceof Finder) {
+            $this->finder = $finder;
+        }
+
+        $this->setFinder($finder);
         $this->setRules($config->getRules());
         $this->setRiskyAllowed($config->getRiskyAllowed());
-        $this->setFinder($config->getFinder());
+        $this->registerCustomFixers($this->filterUnregisteredFixers($config->getCustomFixers()));
+        $this->setUsingCache($config->getUsingCache());
+        $this->setIndent($config->getIndent());
+        $this->setLineEnding($config->getLineEnding());
+        $this->setFormat($config->getFormat());
+        $this->setHideProgress($config->getHideProgress());
+        $this->setPhpExecutable($config->getPhpExecutable());
+
+        if (null !== $config->getCacheFile()) {
+            $this->setCacheFile($config->getCacheFile());
+        }
+
+        if ($config instanceof ParallelAwareConfigInterface) {
+            $this->setParallelConfig($config->getParallelConfig());
+        }
+
+        if ($config instanceof CustomRulesetsAwareConfigInterface) {
+            $this->registerCustomRuleSets($config->getCustomRuleSets());
+        }
+
+        if ($config instanceof RuleCustomisationPolicyAwareConfigInterface) {
+            $this->setRuleCustomisationPolicy($config->getRuleCustomisationPolicy());
+        }
 
         return $this;
+    }
+
+    /**
+     * Registering a fixer name twice makes PHP-CS-Fixer fail.
+     *
+     * @param list<FixerInterface> $fixers
+     *
+     * @return list<FixerInterface>
+     */
+    private function filterUnregisteredFixers(array $fixers): array
+    {
+        $registeredNames = array_map(
+            static fn (FixerInterface $fixer): string => $fixer->getName(),
+            $this->getCustomFixers(),
+        );
+
+        return array_values(array_filter(
+            $fixers,
+            static fn (FixerInterface $fixer): bool => !in_array($fixer->getName(), $registeredNames, true),
+        ));
     }
 }
