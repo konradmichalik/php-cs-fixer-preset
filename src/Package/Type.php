@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Package;
 
+use function in_array;
+
 /**
  * Type.
  *
@@ -23,16 +25,22 @@ enum Type: string
 {
     case ComposerPackage = 'Composer package';
     case ComposerPlugin = 'Composer plugin';
+    case SymfonyBundle = 'Symfony bundle';
     case SymfonyProject = 'Symfony project';
     case TYPO3Extension = 'TYPO3 CMS extension';
     case TYPO3Project = 'TYPO3 CMS project';
 
-    public static function fromComposerType(string $composerType): self
+    /**
+     * @param list<string> $requiredPackages
+     */
+    public static function fromComposerType(string $composerType, array $requiredPackages = []): self
     {
-        return match ($composerType) {
-            'composer-plugin' => self::ComposerPlugin,
-            'symfony-bundle' => self::SymfonyProject,
-            'typo3-cms-extension' => self::TYPO3Extension,
+        return match (true) {
+            'composer-plugin' === $composerType => self::ComposerPlugin,
+            'symfony-bundle' === $composerType => self::SymfonyBundle,
+            'typo3-cms-extension' === $composerType => self::TYPO3Extension,
+            'project' === $composerType && in_array('typo3/cms-core', $requiredPackages, true) => self::TYPO3Project,
+            'project' === $composerType && in_array('symfony/framework-bundle', $requiredPackages, true) => self::SymfonyProject,
             default => self::ComposerPackage,
         };
     }

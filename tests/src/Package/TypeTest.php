@@ -64,9 +64,10 @@ final class TypeTest extends TestCase
     {
         $cases = Type::cases();
 
-        self::assertCount(5, $cases);
+        self::assertCount(6, $cases);
         self::assertContains(Type::ComposerPackage, $cases);
         self::assertContains(Type::ComposerPlugin, $cases);
+        self::assertContains(Type::SymfonyBundle, $cases);
         self::assertContains(Type::SymfonyProject, $cases);
         self::assertContains(Type::TYPO3Extension, $cases);
         self::assertContains(Type::TYPO3Project, $cases);
@@ -108,11 +109,26 @@ final class TypeTest extends TestCase
         self::assertSame(Type::ComposerPlugin, $type);
     }
 
-    public function testFromComposerTypeReturnsSymfonyProject(): void
+    public function testFromComposerTypeReturnsSymfonyBundle(): void
     {
         $type = Type::fromComposerType('symfony-bundle');
 
-        self::assertSame(Type::SymfonyProject, $type);
+        self::assertSame(Type::SymfonyBundle, $type);
+    }
+
+    public function testFromComposerTypeReturnsTYPO3ProjectForProjectRequiringTypo3(): void
+    {
+        self::assertSame(Type::TYPO3Project, Type::fromComposerType('project', ['typo3/cms-core']));
+    }
+
+    public function testFromComposerTypeReturnsSymfonyProjectForProjectRequiringFrameworkBundle(): void
+    {
+        self::assertSame(Type::SymfonyProject, Type::fromComposerType('project', ['symfony/framework-bundle']));
+    }
+
+    public function testFromComposerTypeReturnsComposerPackageForOtherProjects(): void
+    {
+        self::assertSame(Type::ComposerPackage, Type::fromComposerType('project', ['vendor/package']));
     }
 
     public function testFromComposerTypeReturnsTYPO3Extension(): void
