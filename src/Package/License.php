@@ -25,6 +25,16 @@ enum License
     case GPL2OrLater;
     case GPL3OrLater;
 
+    public static function fromComposerLicense(string $composerLicense): ?self
+    {
+        return match ($composerLicense) {
+            'GPL-2.0-or-later', 'GPL-2.0+' => self::GPL2OrLater,
+            'GPL-3.0-or-later', 'GPL-3.0+' => self::GPL3OrLater,
+            'proprietary' => self::Proprietary,
+            default => null,
+        };
+    }
+
     public function licenseText(): string
     {
         return match ($this) {

@@ -62,6 +62,9 @@ return Config::create()
 ;
 ```
 
+> [!TIP]
+> Pass `detectLicense: true` to `Header::fromComposer()` to render the license text for `GPL-2.0-or-later`, `GPL-3.0-or-later` and `proprietary` packages based on the `license` field in `composer.json`.
+
 ## 💎 Credits
 
 This project is highly inspired by the fabulous [php-cs-fixer-config](https://github.com/eliashaeussler/php-cs-fixer-config) package by [Elias Häußler](https://github.com/eliashaeussler).

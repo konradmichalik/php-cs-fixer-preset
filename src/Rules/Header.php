@@ -96,6 +96,7 @@ HEADER
         ?Type $packageType = null,
         ?array $packageAuthors = null,
         ?License $license = null,
+        bool $detectLicense = false,
     ): self {
         $data = ComposerService::readComposerJson($composerJsonPath);
 
@@ -106,6 +107,10 @@ HEADER
         $packageAuthors ??= ComposerService::extractAuthors($data);
 
         $copyrightRange ??= ComposerService::extractCopyrightRange($data);
+
+        if ($detectLicense) {
+            $license ??= ComposerService::extractLicense($data);
+        }
 
         return new self(
             $packageName,

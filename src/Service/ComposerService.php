@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Service;
 
 use JsonException;
-use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, Type};
+use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, License, Type};
 use RuntimeException;
 
+use function array_keys;
+use function array_map;
+use function count;
 use function ctype_digit;
 use function explode;
 use function file_exists;
@@ -25,6 +28,7 @@ use function is_array;
 use function is_int;
 use function is_string;
 use function json_decode;
+use function reset;
 use function sprintf;
 use function str_contains;
 
@@ -69,7 +73,24 @@ final class ComposerService
             throw new RuntimeException('Composer package type must be a string.');
         }
 
-        return Type::fromComposerType($composerType);
+        $require = $composerData['require'] ?? [];
+
+        return Type::fromComposerType($composerType, is_array($require) ? array_map(strval(...), array_keys($require)) : []);
+    }
+
+    /**
+     * @param array<string, mixed> $composerData
+     */
+    public static function extractLicense(array $composerData): ?License
+    {
+        $license = $composerData['license'] ?? null;
+
+        // Multiple licenses cannot be expressed by a single license header
+        if (is_array($license) && 1 === count($license)) {
+            $license = reset($license);
+        }
+
+        return is_string($license) ? License::fromComposerLicense($license) : null;
     }
 
     /**
