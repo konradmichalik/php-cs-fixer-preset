@@ -19,7 +19,6 @@ use PhpCsFixer\{ConfigInterface, Runner};
 use Symfony\Component\Finder\Finder;
 
 use function array_replace_recursive;
-use function class_exists;
 
 /**
  * Config.
@@ -51,10 +50,7 @@ final class Config extends \PhpCsFixer\Config
         $config->finder->ignoreDotFiles(false);
         $config->finder->ignoreVCSIgnored(true);
 
-        // Enable parallel execution (PHP-CS-Fixer >= 3.57)
-        if (class_exists(Runner\Parallel\ParallelConfig::class)) {
-            $config->setParallelConfig(Runner\Parallel\ParallelConfigFactory::detect());
-        }
+        $config->setParallelConfig(Runner\Parallel\ParallelConfigFactory::detect());
 
         // Remove this once dependencies declare support for PHP 8.5
         $config->setUnsupportedPhpVersionAllowed(true);
