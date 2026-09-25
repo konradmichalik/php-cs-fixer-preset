@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc9c838b9268ae22025a440d682f0374",
+    "content-hash": "2925b022cc3728e4731b19ba1964efdc",
     "packages": [
         {
             "name": "clue/ndjson-react",
@@ -5703,6 +5703,90 @@
                 }
             ],
             "time": "2025-11-17T20:03:58+00:00"
+        },
+        {
+            "name": "typo3/coding-standards",
+            "version": "v0.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TYPO3/coding-standards.git",
+                "reference": "182f42f4a6ce9cefc462b933cf90438e73be5ad5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TYPO3/coding-standards/zipball/182f42f4a6ce9cefc462b933cf90438e73be5ad5",
+                "reference": "182f42f4a6ce9cefc462b933cf90438e73be5ad5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "friendsofphp/php-cs-fixer": "^3.95.1",
+                "php": "^8.2",
+                "symfony/console": "^6.4 || ^7.4 || ^8.0",
+                "symfony/filesystem": "^6.4 || ^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "composer/package-versions-deprecated": "1.11.99.5",
+                "ergebnis/composer-normalize": "2.51.0",
+                "keradus/cli-executor": "2.3.0",
+                "maglnet/composer-require-checker": "4.7.1 || 4.20.0 || 4.24.0",
+                "overtrue/phplint": "9.6.3",
+                "phpstan/extension-installer": "1.4.3",
+                "phpstan/phpstan": "2.1.54",
+                "phpstan/phpstan-deprecation-rules": "2.0.4",
+                "phpstan/phpstan-phpunit": "2.0.16",
+                "phpstan/phpstan-strict-rules": "2.0.11",
+                "phpstan/phpstan-symfony": "2.0.15",
+                "phpunit/phpunit": "10.5.63",
+                "symfony/finder": "^6.4 || ^7.4 || ^8.0",
+                "symfony/process": "^6.4 || ^7.4 || ^8.0"
+            },
+            "bin": [
+                "t3-cs",
+                "typo3-coding-standards"
+            ],
+            "type": "coding-standards",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TYPO3\\CodingStandards\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benni Mack",
+                    "email": "benni@typo3.org"
+                },
+                {
+                    "name": "Simon Gilli",
+                    "email": "simon.gilli@typo3.org"
+                }
+            ],
+            "description": "A set of coding guidelines for any TYPO3-related project or extension",
+            "homepage": "https://typo3.org/",
+            "keywords": [
+                "Code style",
+                "cms",
+                "dev",
+                "editorconfig",
+                "php-cs-fixer",
+                "typo3"
+            ],
+            "support": {
+                "chat": "https://typo3.org/help",
+                "docs": "https://docs.typo3.org",
+                "issues": "https://github.com/TYPO3/coding-standards/issues",
+                "source": "https://github.com/TYPO3/coding-standards"
+            },
+            "time": "2026-07-24T08:11:21+00:00"
         }
     ],
     "aliases": [],

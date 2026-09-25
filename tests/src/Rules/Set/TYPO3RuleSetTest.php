@@ -15,6 +15,9 @@ namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
 use KonradMichalik\PhpCsFixerPreset\Rules\{Rule, Set\TYPO3RuleSet};
 use PHPUnit\Framework\TestCase;
+use TYPO3\CodingStandards\CsFixerConfig;
+
+use function in_array;
 
 /**
  * TYPO3RuleSetTest.
@@ -65,5 +68,20 @@ final class TYPO3RuleSetTest extends TestCase
             ['elements' => ['arguments', 'arrays', 'match', 'parameters']],
             $rules['trailing_comma_in_multiline'],
         );
+    }
+
+    public function testContainsRulesFromTypo3CodingStandards(): void
+    {
+        $typo3Rules = CsFixerConfig::create()->getRules();
+        $rules = TYPO3RuleSet::create()->get();
+
+        foreach ($typo3Rules as $name => $configuration) {
+            if (in_array($name, ['no_superfluous_phpdoc_tags', 'trailing_comma_in_multiline'], true)) {
+                continue;
+            }
+
+            self::assertArrayHasKey($name, $rules);
+            self::assertSame($configuration, $rules[$name]);
+        }
     }
 }
