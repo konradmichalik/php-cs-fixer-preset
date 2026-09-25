@@ -62,6 +62,9 @@ return Config::create()
 ;
 ```
 
+> [!NOTE]
+> `withRule()` and `RuleSet::add()` merge on rule level: a rule's configuration replaces any previous configuration of the same rule completely. Pass the full option set when overriding a configured rule.
+
 ## 💎 Credits
 
 This project is highly inspired by the fabulous [php-cs-fixer-config](https://github.com/eliashaeussler/php-cs-fixer-config) package by [Elias Häußler](https://github.com/eliashaeussler).

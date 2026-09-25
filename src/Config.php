@@ -18,7 +18,7 @@ use KonradMichalik\PhpCsFixerPreset\Rules\Set\DefaultSet;
 use PhpCsFixer\{ConfigInterface, Runner};
 use Symfony\Component\Finder\Finder;
 
-use function array_replace_recursive;
+use function array_replace;
 use function class_exists;
 
 /**
@@ -65,7 +65,7 @@ final class Config extends \PhpCsFixer\Config
     public function withRule(Rule $rule, bool $merge = true): self
     {
         if ($merge) {
-            $rules = array_replace_recursive($this->getRules(), $rule->get());
+            $rules = array_replace($this->getRules(), $rule->get());
         } else {
             $rules = $rule->get();
         }

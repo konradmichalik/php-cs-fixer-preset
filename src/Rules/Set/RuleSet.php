@@ -17,7 +17,7 @@ use KonradMichalik\PhpCsFixerPreset\Rules\Rule;
 
 use function array_diff_key;
 use function array_flip;
-use function array_replace_recursive;
+use function array_replace;
 
 /**
  * RuleSet.
@@ -52,7 +52,7 @@ final class RuleSet implements Rule
      */
     public function add(array $rules): self
     {
-        $this->rules = array_replace_recursive($this->rules, $rules);
+        $this->rules = array_replace($this->rules, $rules);
 
         return $this;
     }
