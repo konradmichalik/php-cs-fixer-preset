@@ -282,18 +282,20 @@ final class HeaderFromComposerTest extends TestCase
         }
     }
 
-    public function testFromComposerHandlesMissingName(): void
+    public function testFromComposerThrowsExceptionWhenNameIsMissing(): void
     {
         $tmpFile = tempnam(sys_get_temp_dir(), 'composer');
         file_put_contents($tmpFile, json_encode([
             'type' => 'library',
         ]));
 
-        $header = Header::fromComposer($tmpFile, CopyrightRange::from(2025));
+        $this->expectException(RuntimeException::class);
 
-        self::assertSame('', $header->packageName);
-
-        unlink($tmpFile);
+        try {
+            Header::fromComposer($tmpFile, CopyrightRange::from(2025));
+        } finally {
+            unlink($tmpFile);
+        }
     }
 
     public function testFromComposerHandlesNameWithoutSlash(): void
