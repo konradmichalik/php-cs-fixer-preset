@@ -65,6 +65,9 @@ return Config::create()
 > [!TIP]
 > Pass `detectLicense: true` to `Header::fromComposer()` to render the license text for `GPL-2.0-or-later`, `GPL-3.0-or-later` and `proprietary` packages based on the `license` field in `composer.json`.
 
+> [!NOTE]
+> `withRule()` and `RuleSet::add()` merge on rule level: a rule's configuration replaces any previous configuration of the same rule completely. Pass the full option set when overriding a configured rule.
+
 ## 💎 Credits
 
 This project is highly inspired by the fabulous [php-cs-fixer-config](https://github.com/eliashaeussler/php-cs-fixer-config) package by [Elias Häußler](https://github.com/eliashaeussler).
