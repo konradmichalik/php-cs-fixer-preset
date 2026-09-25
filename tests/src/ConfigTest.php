@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests;
 
-use KonradMichalik\PhpCsFixerPreset\{Config, Rules\Rule};
+use KonradMichalik\PhpCsFixerPreset\{Config, Rules\Rule, Rules\Set\RuleSet};
 use PhpCsFixer\ConfigInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
@@ -92,6 +92,18 @@ final class ConfigTest extends TestCase
         self::assertArrayHasKey('array_syntax', $newRules);
         self::assertArrayHasKey('@PER-CS', $newRules);
         self::assertCount(count($existingRules) + 1, $newRules);
+    }
+
+    public function testWithRuleReplacesListOptionsOfExistingRule(): void
+    {
+        $config = Config::create()->withRule(RuleSet::fromArray([
+            'trailing_comma_in_multiline' => ['elements' => ['arrays']],
+        ]));
+
+        self::assertSame(
+            ['elements' => ['arrays']],
+            $config->getRules()['trailing_comma_in_multiline'],
+        );
     }
 
     public function testWithRuleReplacesRulesWhenMergeIsFalse(): void

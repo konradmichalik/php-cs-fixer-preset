@@ -58,25 +58,24 @@ final class RuleSetTest extends TestCase
         );
     }
 
-    public function testAddDeepMergesArrayRules(): void
+    public function testAddReplacesRuleConfiguration(): void
     {
         $ruleSet = RuleSet::fromArray([
             'ordered_imports' => [
                 'sort_algorithm' => 'alpha',
-                'imports_order' => ['class'],
+                'imports_order' => ['class', 'function', 'const'],
             ],
         ]);
 
         $ruleSet->add([
             'ordered_imports' => [
-                'imports_order' => ['class', 'function', 'const'],
+                'imports_order' => ['class'],
             ],
         ]);
 
         $expected = [
             'ordered_imports' => [
-                'sort_algorithm' => 'alpha',
-                'imports_order' => ['class', 'function', 'const'],
+                'imports_order' => ['class'],
             ],
         ];
 
