@@ -86,6 +86,9 @@ DEFAULT;
     }
 
     /**
+     * A relative $composerJsonPath is resolved against the current working
+     * directory, not the config file. Pass __DIR__.'/composer.json' instead.
+     *
      * @param ?list<Author> $packageAuthors
      *
      * @throws RuntimeException

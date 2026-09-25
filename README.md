@@ -49,6 +49,7 @@ return Config::create()
     // Header Comment Rule with Composer Detection
     ->withRule(
         Header::fromComposer(
+            __DIR__.'/composer.json',
             copyrightRange: CopyrightRange::from(2025) // Optional overwrite specific composer information
         ),
     )

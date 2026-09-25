@@ -23,7 +23,7 @@ return Config::create()
         new DocBlockHeaderFixer(),
     ])
     ->withRule(
-        Header::fromComposer(),
+        Header::fromComposer(__DIR__.'/composer.json'),
     )
     ->withRule(
         RuleSet::fromArray(
