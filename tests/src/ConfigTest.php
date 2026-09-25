@@ -68,8 +68,7 @@ final class ConfigTest extends TestCase
         $config = Config::create();
         $rules = $config->getRules();
 
-        self::assertArrayHasKey('@PER-CS', $rules);
-        self::assertArrayHasKey('@PSR12', $rules);
+        self::assertArrayHasKey('@PER-CS3x0', $rules);
         self::assertArrayHasKey('@Symfony', $rules);
         self::assertTrue($rules['declare_strict_types']);
     }
@@ -90,7 +89,7 @@ final class ConfigTest extends TestCase
         $newRules = $config->getRules();
 
         self::assertArrayHasKey('array_syntax', $newRules);
-        self::assertArrayHasKey('@PER-CS', $newRules);
+        self::assertArrayHasKey('@PER-CS3x0', $newRules);
         self::assertCount(count($existingRules) + 1, $newRules);
     }
 
@@ -109,7 +108,7 @@ final class ConfigTest extends TestCase
         $rules = $config->getRules();
 
         self::assertArrayHasKey('array_syntax', $rules);
-        self::assertArrayNotHasKey('@PER-CS', $rules);
+        self::assertArrayNotHasKey('@PER-CS3x0', $rules);
         self::assertCount(1, $rules);
     }
 
