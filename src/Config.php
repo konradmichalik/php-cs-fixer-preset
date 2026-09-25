@@ -24,7 +24,6 @@ use function array_filter;
 use function array_map;
 use function array_replace;
 use function array_values;
-use function class_exists;
 use function in_array;
 
 /**
@@ -57,10 +56,7 @@ final class Config extends \PhpCsFixer\Config
         $config->finder->ignoreDotFiles(false);
         $config->finder->ignoreVCSIgnored(true);
 
-        // Enable parallel execution (PHP-CS-Fixer >= 3.57)
-        if (class_exists(Runner\Parallel\ParallelConfig::class)) {
-            $config->setParallelConfig(Runner\Parallel\ParallelConfigFactory::detect());
-        }
+        $config->setParallelConfig(Runner\Parallel\ParallelConfigFactory::detect());
 
         // Remove this once dependencies declare support for PHP 8.5
         $config->setUnsupportedPhpVersionAllowed(true);
