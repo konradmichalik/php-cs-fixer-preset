@@ -19,6 +19,9 @@ use KonradMichalik\PhpCsFixerPreset\Service\ComposerService;
 use RuntimeException;
 use Stringable;
 
+use function array_filter;
+use function array_map;
+use function implode;
 use function is_array;
 use function sprintf;
 
@@ -50,14 +53,13 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 DEFAULT;
 
-        return trim(<<<HEADER
-This file is part of the "{$this->packageName}" {$this->packageType->value}.
+        $sections = [
+            sprintf('This file is part of the "%s" %s.', $this->packageName, $this->packageType->value),
+            $this->generateCopyrightLines(),
+            $licenseSection,
+        ];
 
-{$this->generateCopyrightLines()}
-
-{$licenseSection}
-HEADER
-        );
+        return implode("\n\n", array_filter($sections, static fn (string $section): bool => '' !== $section));
     }
 
     /**
@@ -133,20 +135,15 @@ HEADER
 
     private function generateCopyrightLines(): string
     {
+        $prefix = null === $this->copyrightRange ? '(c)' : sprintf('(c) %s', $this->copyrightRange);
+
         if ([] === $this->packageAuthors) {
-            return '';
+            return null === $this->copyrightRange ? '' : $prefix;
         }
 
-        $lines = [];
-
-        foreach ($this->packageAuthors as $author) {
-            if (null === $this->copyrightRange) {
-                $lines[] = sprintf('(c) %s', $author->__toString());
-                continue;
-            }
-            $lines[] = sprintf('(c) %s %s', $this->copyrightRange, $author->__toString());
-        }
-
-        return implode(\PHP_EOL, $lines);
+        return implode(
+            \PHP_EOL,
+            array_map(static fn (Author $author): string => sprintf('%s %s', $prefix, $author), $this->packageAuthors),
+        );
     }
 }
