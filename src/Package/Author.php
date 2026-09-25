@@ -27,17 +27,21 @@ final readonly class Author implements Stringable
 {
     private function __construct(
         public string $name,
-        public string $emailAddress,
+        public ?string $emailAddress,
     ) {}
 
     public function __toString(): string
     {
+        if (null === $this->emailAddress) {
+            return $this->name;
+        }
+
         return sprintf('%s <%s>', $this->name, $this->emailAddress);
     }
 
     public static function create(
         string $name,
-        string $emailAddress,
+        ?string $emailAddress = null,
     ): self {
         return new self($name, $emailAddress);
     }

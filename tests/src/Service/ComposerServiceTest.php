@@ -160,12 +160,37 @@ final class ComposerServiceTest extends TestCase
         self::assertSame('typo3-extension', $name);
     }
 
-    public function testExtractPackageNameHandlesMissingName(): void
+    public function testExtractPackageNameThrowsExceptionWhenNameIsMissing(): void
     {
-        $data = [];
-        $name = ComposerService::extractPackageName($data, Type::ComposerPackage);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Composer package name must be a non-empty string');
 
-        self::assertSame('', $name);
+        ComposerService::extractPackageName([], Type::ComposerPackage);
+    }
+
+    public function testExtractPackageNameThrowsExceptionWhenNameHasNoPackagePart(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        ComposerService::extractPackageName(['name' => 'vendor/'], Type::ComposerPackage);
+    }
+
+    public function testExtractPackageNameThrowsExceptionWhenExtensionKeyIsNotAString(): void
+    {
+        $data = ['extra' => ['typo3/cms' => ['extension-key' => 123]]];
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('TYPO3 extension key must be a non-empty string');
+
+        ComposerService::extractPackageName($data, Type::TYPO3Extension);
+    }
+
+    public function testExtractPackageTypeThrowsExceptionWhenTypeIsNotAString(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Composer package type must be a string');
+
+        ComposerService::extractPackageType(['type' => ['x']]);
     }
 
     public function testExtractPackageNameHandlesNameWithoutSlash(): void
@@ -216,7 +241,6 @@ final class ComposerServiceTest extends TestCase
             'authors' => [
                 ['name' => 'John Doe', 'email' => 'john@example.com'],
                 'invalid-author',
-                ['name' => 'Jane Smith'], // Missing email
                 ['email' => 'noreply@example.com'], // Missing name
             ],
         ];
@@ -225,6 +249,15 @@ final class ComposerServiceTest extends TestCase
 
         self::assertCount(1, $authors);
         self::assertSame('John Doe', $authors[0]->name);
+    }
+
+    public function testExtractAuthorsAllowsAuthorWithoutEmail(): void
+    {
+        $authors = ComposerService::extractAuthors(['authors' => [['name' => 'Jane Smith']]]);
+
+        self::assertCount(1, $authors);
+        self::assertSame('Jane Smith', $authors[0]->name);
+        self::assertNull($authors[0]->emailAddress);
     }
 
     public function testExtractCopyrightRangeFromComposerData(): void
@@ -251,7 +284,7 @@ final class ComposerServiceTest extends TestCase
         self::assertNull($copyrightRange);
     }
 
-    public function testExtractCopyrightRangeReturnsNullWhenNotInteger(): void
+    public function testExtractCopyrightRangeAcceptsNumericString(): void
     {
         $data = [
             'extra' => [
@@ -263,7 +296,33 @@ final class ComposerServiceTest extends TestCase
 
         $copyrightRange = ComposerService::extractCopyrightRange($data);
 
-        self::assertNull($copyrightRange);
+        self::assertInstanceOf(CopyrightRange::class, $copyrightRange);
+        self::assertSame(2020, $copyrightRange->from);
+    }
+
+    public function testExtractCopyrightRangeThrowsExceptionWhenYearIsZero(): void
+    {
+        $data = ['extra' => ['konradmichalik/php-cs-fixer-preset' => ['copyright' => '0']]];
+
+        $this->expectException(RuntimeException::class);
+
+        ComposerService::extractCopyrightRange($data);
+    }
+
+    public function testExtractCopyrightRangeThrowsExceptionWhenInvalid(): void
+    {
+        $data = [
+            'extra' => [
+                'konradmichalik/php-cs-fixer-preset' => [
+                    'copyright' => 'since 2020',
+                ],
+            ],
+        ];
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Copyright year must be a positive integer');
+
+        ComposerService::extractCopyrightRange($data);
     }
 
     public function testExtractCopyrightRangeReturnsNullWhenExtraIsMissing(): void
