@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
 use KonradMichalik\PhpCsFixerPreset\Rules\{Rule, Set\DefaultSet};
+use PhpCsFixer\RuleSet\RuleSet as PhpCsFixerRuleSet;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,20 +50,12 @@ final class DefaultSetTest extends TestCase
         self::assertNotEmpty($rules);
     }
 
-    public function testIncludesPERCSRuleSet(): void
+    public function testIncludesPinnedPERCSRuleSet(): void
     {
         $rules = $this->defaultSet->get();
 
-        self::assertArrayHasKey('@PER-CS', $rules);
-        self::assertTrue($rules['@PER-CS']);
-    }
-
-    public function testIncludesPSR12RuleSet(): void
-    {
-        $rules = $this->defaultSet->get();
-
-        self::assertArrayHasKey('@PSR12', $rules);
-        self::assertTrue($rules['@PSR12']);
+        self::assertArrayHasKey('@PER-CS3x0', $rules);
+        self::assertTrue($rules['@PER-CS3x0']);
     }
 
     public function testIncludesSymfonyRuleSet(): void
@@ -149,17 +142,15 @@ final class DefaultSetTest extends TestCase
 
     public function testEnablesDeclareStrictTypes(): void
     {
-        $rules = $this->defaultSet->get();
+        $rules = (new PhpCsFixerRuleSet($this->defaultSet->get()))->getRules();
 
-        self::assertArrayHasKey('declare_strict_types', $rules);
         self::assertTrue($rules['declare_strict_types']);
     }
 
     public function testEnablesNoUnusedImports(): void
     {
-        $rules = $this->defaultSet->get();
+        $rules = (new PhpCsFixerRuleSet($this->defaultSet->get()))->getRules();
 
-        self::assertArrayHasKey('no_unused_imports', $rules);
         self::assertTrue($rules['no_unused_imports']);
     }
 
