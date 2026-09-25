@@ -34,8 +34,7 @@ final readonly class DefaultSet implements Rule
     public function get(): array
     {
         return [
-            '@PER-CS' => true,
-            '@PSR12' => true,
+            '@PER-CS3x0' => true,
             '@Symfony' => true,
             '@Symfony:risky' => true,
             'single_import_per_statement' => false,
@@ -74,8 +73,8 @@ final readonly class DefaultSet implements Rule
                     'parameters',
                 ],
             ],
+            // @Symfony:risky configures this rule to remove strict types declarations
             'declare_strict_types' => true,
-            'no_unused_imports' => true,
             'group_import' => true,
         ];
     }
