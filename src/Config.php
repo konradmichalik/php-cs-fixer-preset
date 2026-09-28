@@ -22,7 +22,7 @@ use Symfony\Component\Finder\Finder;
 
 use function array_filter;
 use function array_map;
-use function array_replace_recursive;
+use function array_replace;
 use function array_values;
 use function class_exists;
 use function in_array;
@@ -71,7 +71,7 @@ final class Config extends \PhpCsFixer\Config
     public function withRule(Rule $rule, bool $merge = true): self
     {
         if ($merge) {
-            $rules = array_replace_recursive($this->getRules(), $rule->get());
+            $rules = array_replace($this->getRules(), $rule->get());
         } else {
             $rules = $rule->get();
         }
