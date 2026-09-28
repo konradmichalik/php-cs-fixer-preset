@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Rules\Set;
 
 use KonradMichalik\PhpCsFixerPreset\Rules\Rule;
+use LogicException;
 use TYPO3\CodingStandards;
 
 use function class_exists;
@@ -31,13 +32,16 @@ final readonly class TYPO3RuleSet implements Rule
      */
     private array $rules;
 
+    /**
+     * @throws LogicException
+     */
     public function __construct()
     {
-        $rules = [];
-
-        if (class_exists(CodingStandards\CsFixerConfig::class)) {
-            $rules = CodingStandards\CsFixerConfig::create()->getRules();
+        if (!class_exists(CodingStandards\CsFixerConfig::class)) {
+            throw new LogicException('TYPO3RuleSet requires the "typo3/coding-standards" package. Install it with "composer require --dev typo3/coding-standards".');
         }
+
+        $rules = CodingStandards\CsFixerConfig::create()->getRules();
 
         $rules['no_superfluous_phpdoc_tags'] = [
             'allow_mixed' => true,
