@@ -132,6 +132,36 @@ final class HeaderTest extends TestCase
         self::assertStringNotContainsString('(c)', $result);
     }
 
+    public function testToStringWithoutAuthorsHasNoEmptyCopyrightBlock(): void
+    {
+        $header = Header::create('test/package', Type::ComposerPackage);
+
+        $expected = <<<'HEADER'
+This file is part of the "test/package" Composer package.
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+HEADER;
+
+        self::assertSame($expected, $header->__toString());
+    }
+
+    public function testToStringWithCopyrightRangeButNoAuthors(): void
+    {
+        $header = Header::create('test/package', Type::ComposerPackage, [], CopyrightRange::from(2020, 2025));
+
+        $expected = <<<'HEADER'
+This file is part of the "test/package" Composer package.
+
+(c) 2020-2025
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+HEADER;
+
+        self::assertSame($expected, $header->__toString());
+    }
+
     public function testToStringWithSingleAuthor(): void
     {
         $author = Author::create('John Doe', 'john@example.com');
