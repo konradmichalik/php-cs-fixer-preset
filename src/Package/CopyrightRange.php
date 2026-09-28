@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Package;
 
+use InvalidArgumentException;
 use Stringable;
 
 use function date;
+use function max;
 use function sprintf;
 
 /**
@@ -51,7 +53,13 @@ final readonly class CopyrightRange implements Stringable
 
     public static function from(int $year, ?int $to = null): self
     {
-        return new self($year, $to ?? self::getCurrentYear());
+        $to ??= max($year, self::getCurrentYear());
+
+        if ($year > $to) {
+            throw new InvalidArgumentException(sprintf('Copyright start year %d must not be after end year %d.', $year, $to));
+        }
+
+        return new self($year, $to);
     }
 
     private static function getCurrentYear(): int

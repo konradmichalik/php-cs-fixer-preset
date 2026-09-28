@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Package;
 
+use InvalidArgumentException;
 use KonradMichalik\PhpCsFixerPreset\Package\CopyrightRange;
 use PHPUnit\Framework\TestCase;
 use Stringable;
@@ -64,6 +65,20 @@ final class CopyrightRangeTest extends TestCase
 
         self::assertSame(2020, $range->from);
         self::assertSame(2025, $range->to);
+    }
+
+    public function testFromThrowsExceptionWhenFromIsAfterTo(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        CopyrightRange::from(2030, 2020);
+    }
+
+    public function testFromWithFutureYearAndNoEndYearRendersSingleYear(): void
+    {
+        $nextYear = (int) date('Y') + 1;
+
+        self::assertSame((string) $nextYear, CopyrightRange::from($nextYear)->__toString());
     }
 
     public function testToStringReturnsSingleYearWhenFromIsNull(): void

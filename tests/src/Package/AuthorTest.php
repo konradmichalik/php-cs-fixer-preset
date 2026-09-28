@@ -86,6 +86,11 @@ final class AuthorTest extends TestCase
         self::assertSame('John Doe <john.doe+test@sub.example.com>', (string) $author);
     }
 
+    public function testToStringWithoutEmailAddressReturnsName(): void
+    {
+        self::assertSame('Jane Smith', Author::create('Jane Smith')->__toString());
+    }
+
     public function testFromComposerReadsAuthorsFromFile(): void
     {
         $composerData = ComposerService::readComposerJson(__DIR__.'/../../../composer.json');
@@ -177,7 +182,6 @@ final class AuthorTest extends TestCase
         file_put_contents($tmpFile, json_encode([
             'authors' => [
                 ['name' => 'John Doe', 'email' => 'john@example.com'],
-                ['name' => 'No Email'],
                 ['email' => 'noname@example.com'],
                 'invalid',
                 ['name' => 'Jane Smith', 'email' => 'jane@example.com'],
