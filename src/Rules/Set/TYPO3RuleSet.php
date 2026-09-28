@@ -28,7 +28,7 @@ use function class_exists;
 final readonly class TYPO3RuleSet implements Rule
 {
     /**
-     * @var array<string, mixed>
+     * @var array<string, array<string, mixed>|bool>
      */
     private array $rules;
 
@@ -64,7 +64,7 @@ final readonly class TYPO3RuleSet implements Rule
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, array<string, mixed>|bool>
      */
     public function get(): array
     {

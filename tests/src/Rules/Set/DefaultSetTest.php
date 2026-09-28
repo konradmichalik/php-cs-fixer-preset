@@ -165,6 +165,8 @@ final class DefaultSetTest extends TestCase
     public function testOrderedClassElementsHasCorrectOrder(): void
     {
         $rules = $this->defaultSet->get();
+
+        self::assertIsArray($rules['ordered_class_elements']);
         $order = $rules['ordered_class_elements']['order'];
 
         $expectedOrder = [
