@@ -14,7 +14,7 @@
 	"require": {
 		"php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
 		"ext-ctype": "*",
-		"friendsofphp/php-cs-fixer": "^3.76",
+		"friendsofphp/php-cs-fixer": "^3.92",
 		"symfony/finder": "^5.4 || ^6.0 || ^7.0 || ^8.0"
 	},
 	"require-dev": {

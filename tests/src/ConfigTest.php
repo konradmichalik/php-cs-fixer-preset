@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Tests;
 
 use KonradMichalik\PhpCsFixerPreset\{Config, Rules\Rule};
+use KonradMichalik\PhpDocBlockHeaderFixer\Rules\DocBlockHeaderFixer;
 use PhpCsFixer\ConfigInterface;
+use PhpCsFixer\RuleSet\AbstractRuleSetDefinition;
+use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 
@@ -148,6 +151,87 @@ final class ConfigTest extends TestCase
         self::assertEquals(['single_quote' => true], $targetConfig->getRules());
         self::assertFalse($targetConfig->getRiskyAllowed());
         self::assertSame($sourceFinder, $targetConfig->getFinder());
+    }
+
+    public function testWithConfigImportsRemainingSettings(): void
+    {
+        $customFixer = new DocBlockHeaderFixer();
+        $parallelConfig = new ParallelConfig(2, 5);
+        $sourceConfig = (new \PhpCsFixer\Config())
+            ->registerCustomFixers([$customFixer])
+            ->setCacheFile('/tmp/custom.cache')
+            ->setUsingCache(false)
+            ->setIndent("\t")
+            ->setLineEnding("\r\n")
+            ->setFormat('json')
+            ->setHideProgress(true)
+            ->setPhpExecutable('/usr/bin/php')
+            ->setParallelConfig($parallelConfig);
+
+        $targetConfig = Config::create()->withConfig($sourceConfig);
+
+        self::assertSame([$customFixer], $targetConfig->getCustomFixers());
+        self::assertSame('/tmp/custom.cache', $targetConfig->getCacheFile());
+        self::assertFalse($targetConfig->getUsingCache());
+        self::assertSame("\t", $targetConfig->getIndent());
+        self::assertSame("\r\n", $targetConfig->getLineEnding());
+        self::assertSame('json', $targetConfig->getFormat());
+        self::assertTrue($targetConfig->getHideProgress());
+        self::assertSame('/usr/bin/php', $targetConfig->getPhpExecutable());
+        self::assertSame($parallelConfig, $targetConfig->getParallelConfig());
+    }
+
+    public function testWithConfigDoesNotRegisterCustomFixerTwice(): void
+    {
+        $sourceConfig = (new \PhpCsFixer\Config())->registerCustomFixers([new DocBlockHeaderFixer()]);
+
+        $targetConfig = Config::create()
+            ->withConfig($sourceConfig)
+            ->withConfig($sourceConfig);
+
+        self::assertCount(1, $targetConfig->getCustomFixers());
+    }
+
+    public function testWithConfigImportsCustomRuleSets(): void
+    {
+        $ruleSet = new class extends AbstractRuleSetDefinition {
+            public function getName(): string
+            {
+                return '@Vendor/custom';
+            }
+
+            public function getRules(): array
+            {
+                return ['single_quote' => true];
+            }
+
+            public function getDescription(): string
+            {
+                return 'Custom rule set.';
+            }
+        };
+        $sourceConfig = (new \PhpCsFixer\Config())->registerCustomRuleSets([$ruleSet]);
+
+        $targetConfig = Config::create()->withConfig($sourceConfig);
+
+        self::assertSame([$ruleSet], $targetConfig->getCustomRuleSets());
+    }
+
+    public function testWithFinderAfterWithConfigReceivesImportedFinder(): void
+    {
+        $sourceFinder = (new Finder())->in(__DIR__);
+        $sourceConfig = (new \PhpCsFixer\Config())->setFinder($sourceFinder);
+
+        $receivedFinder = null;
+        Config::create()
+            ->withConfig($sourceConfig)
+            ->withFinder(static function (Finder $finder) use (&$receivedFinder): Finder {
+                $receivedFinder = $finder;
+
+                return $finder;
+            });
+
+        self::assertSame($sourceFinder, $receivedFinder);
     }
 
     public function testWithRuleReturnsFluentInterface(): void
