@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Service;
 
 use JsonException;
-use KonradMichalik\PhpCsFixerPreset\Package\{CopyrightRange, Type};
+use KonradMichalik\PhpCsFixerPreset\Package\{CopyrightRange, License, Type};
 use KonradMichalik\PhpCsFixerPreset\Service\ComposerService;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -102,7 +102,7 @@ final class ComposerServiceTest extends TestCase
         $data = ['type' => 'symfony-bundle'];
         $type = ComposerService::extractPackageType($data);
 
-        self::assertSame(Type::SymfonyProject, $type);
+        self::assertSame(Type::SymfonyBundle, $type);
     }
 
     public function testExtractPackageTypeFromTypo3Extension(): void
@@ -127,6 +127,33 @@ final class ComposerServiceTest extends TestCase
         $type = ComposerService::extractPackageType($data);
 
         self::assertSame(Type::ComposerPackage, $type);
+    }
+
+    public function testExtractPackageTypeDetectsTYPO3Project(): void
+    {
+        $data = ['type' => 'project', 'require' => ['typo3/cms-core' => '^13.4']];
+
+        self::assertSame(Type::TYPO3Project, ComposerService::extractPackageType($data));
+    }
+
+    public function testExtractLicenseDetectsKnownLicense(): void
+    {
+        self::assertSame(License::GPL3OrLater, ComposerService::extractLicense(['license' => 'GPL-3.0-or-later']));
+    }
+
+    public function testExtractLicenseAcceptsSingleElementList(): void
+    {
+        self::assertSame(License::GPL2OrLater, ComposerService::extractLicense(['license' => ['GPL-2.0-or-later']]));
+    }
+
+    public function testExtractLicenseReturnsNullForMultipleLicenses(): void
+    {
+        self::assertNull(ComposerService::extractLicense(['license' => ['GPL-3.0-or-later', 'MIT']]));
+    }
+
+    public function testExtractLicenseReturnsNullWhenMissing(): void
+    {
+        self::assertNull(ComposerService::extractLicense([]));
     }
 
     public function testExtractPackageNameFromComposerName(): void

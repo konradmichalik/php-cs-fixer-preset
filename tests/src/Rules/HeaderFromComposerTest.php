@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules;
 
 use JsonException;
-use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, Type};
+use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, License, Type};
 use KonradMichalik\PhpCsFixerPreset\Rules\Header;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -80,7 +80,7 @@ final class HeaderFromComposerTest extends TestCase
 
         $header = Header::fromComposer($tmpFile, CopyrightRange::from(2025));
 
-        self::assertSame(Type::SymfonyProject, $header->packageType);
+        self::assertSame(Type::SymfonyBundle, $header->packageType);
 
         unlink($tmpFile);
     }
@@ -390,6 +390,30 @@ final class HeaderFromComposerTest extends TestCase
         $header = Header::fromComposer($tmpFile);
 
         self::assertNull($header->copyrightRange);
+
+        unlink($tmpFile);
+    }
+
+    public function testFromComposerIgnoresLicenseByDefault(): void
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), 'composer');
+        file_put_contents($tmpFile, json_encode(['name' => 'vendor/package', 'license' => 'GPL-3.0-or-later']));
+
+        $header = Header::fromComposer($tmpFile);
+
+        self::assertNull($header->license);
+
+        unlink($tmpFile);
+    }
+
+    public function testFromComposerDetectsLicenseWhenEnabled(): void
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), 'composer');
+        file_put_contents($tmpFile, json_encode(['name' => 'vendor/package', 'license' => 'GPL-3.0-or-later']));
+
+        $header = Header::fromComposer($tmpFile, detectLicense: true);
+
+        self::assertSame(License::GPL3OrLater, $header->license);
 
         unlink($tmpFile);
     }
