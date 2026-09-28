@@ -103,6 +103,7 @@ final class HeaderTest extends TestCase
         $header = Header::create('test/package', Type::ComposerPackage);
         $rules = $header->get();
 
+        self::assertIsArray($rules['header_comment']);
         self::assertSame('comment', $rules['header_comment']['comment_type']);
     }
 
@@ -111,6 +112,7 @@ final class HeaderTest extends TestCase
         $header = Header::create('test/package', Type::ComposerPackage);
         $rules = $header->get();
 
+        self::assertIsArray($rules['header_comment']);
         self::assertSame('after_declare_strict', $rules['header_comment']['location']);
     }
 
@@ -119,6 +121,7 @@ final class HeaderTest extends TestCase
         $header = Header::create('test/package', Type::ComposerPackage);
         $rules = $header->get();
 
+        self::assertIsArray($rules['header_comment']);
         self::assertSame('both', $rules['header_comment']['separate']);
     }
 

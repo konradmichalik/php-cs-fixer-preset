@@ -29,7 +29,7 @@ final readonly class DefaultSet implements Rule
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, array<string, mixed>|bool>
      */
     public function get(): array
     {

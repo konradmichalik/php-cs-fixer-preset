@@ -57,7 +57,11 @@ final class ComposerService
             throw new RuntimeException(sprintf('Failed to read composer file at: %s', $composerJsonPath));
         }
 
-        return json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);
+        $data = json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);
+
+        self::assertIsJsonObject($data, $composerJsonPath);
+
+        return $data;
     }
 
     /**
@@ -100,9 +104,11 @@ final class ComposerService
      */
     public static function extractPackageName(array $composerData, Type $packageType): string
     {
-        if (Type::TYPO3Extension === $packageType && isset($composerData['extra']['typo3/cms']['extension-key'])) {
+        $extensionKey = self::extractNestedValue($composerData, 'extra', 'typo3/cms', 'extension-key');
+
+        if (Type::TYPO3Extension === $packageType && null !== $extensionKey) {
             return self::requireNonEmptyString(
-                $composerData['extra']['typo3/cms']['extension-key'],
+                $extensionKey,
                 'TYPO3 extension key must be a non-empty string.',
             );
         }
@@ -151,7 +157,7 @@ final class ComposerService
      */
     public static function extractCopyrightRange(array $composerData): ?CopyrightRange
     {
-        $copyright = $composerData['extra']['konradmichalik/php-cs-fixer-preset']['copyright'] ?? null;
+        $copyright = self::extractNestedValue($composerData, 'extra', 'konradmichalik/php-cs-fixer-preset', 'copyright');
 
         if (null === $copyright) {
             return null;
@@ -166,6 +172,42 @@ final class ComposerService
         }
 
         return CopyrightRange::from($copyright);
+    }
+
+    /**
+     * @phpstan-assert array<string, mixed> $data
+     *
+     * @throws RuntimeException
+     */
+    private static function assertIsJsonObject(mixed $data, string $composerJsonPath): void
+    {
+        if (!is_array($data)) {
+            throw new RuntimeException(sprintf('Composer file does not contain a JSON object: %s', $composerJsonPath));
+        }
+
+        foreach (array_keys($data) as $key) {
+            if (!is_string($key)) {
+                throw new RuntimeException(sprintf('Composer file does not contain a JSON object: %s', $composerJsonPath));
+            }
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function extractNestedValue(array $data, string ...$keys): mixed
+    {
+        $value = $data;
+
+        foreach ($keys as $key) {
+            if (!is_array($value) || !isset($value[$key])) {
+                return null;
+            }
+
+            $value = $value[$key];
+        }
+
+        return $value;
     }
 
     /**

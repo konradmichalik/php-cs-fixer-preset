@@ -22,7 +22,7 @@ namespace KonradMichalik\PhpCsFixerPreset\Rules;
 interface Rule
 {
     /**
-     * @return array<string, mixed>
+     * @return array<string, array<string, mixed>|bool>
      */
     public function get(): array;
 }

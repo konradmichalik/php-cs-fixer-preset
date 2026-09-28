@@ -28,7 +28,7 @@ use function array_replace;
 final class RuleSet implements Rule
 {
     /**
-     * @param array<string, mixed> $rules
+     * @param array<string, array<string, mixed>|bool> $rules
      */
     public function __construct(
         private array $rules,
@@ -40,7 +40,7 @@ final class RuleSet implements Rule
     }
 
     /**
-     * @param array<string, mixed> $rules
+     * @param array<string, array<string, mixed>|bool> $rules
      */
     public static function fromArray(array $rules): self
     {
@@ -48,7 +48,7 @@ final class RuleSet implements Rule
     }
 
     /**
-     * @param array<string, mixed> $rules
+     * @param array<string, array<string, mixed>|bool> $rules
      */
     public function add(array $rules): self
     {
@@ -65,7 +65,7 @@ final class RuleSet implements Rule
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, array<string, mixed>|bool>
      */
     public function get(): array
     {
