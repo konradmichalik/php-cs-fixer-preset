@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90e31ed35c65168e056af71663a49ad8",
+    "content-hash": "7219df3b2517c0ab18c34b744ec729d2",
     "packages": [
         {
             "name": "clue/ndjson-react",
@@ -3390,16 +3390,16 @@
         },
         {
             "name": "konradmichalik/php-doc-block-header-fixer",
-            "version": "0.3.5",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/konradmichalik/php-doc-block-header-fixer.git",
-                "reference": "111aa54c491b5b399d0c04c96f038b847b5be771"
+                "reference": "aac6011044fbce11c194ecf553add69200902cc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/konradmichalik/php-doc-block-header-fixer/zipball/111aa54c491b5b399d0c04c96f038b847b5be771",
-                "reference": "111aa54c491b5b399d0c04c96f038b847b5be771",
+                "url": "https://api.github.com/repos/konradmichalik/php-doc-block-header-fixer/zipball/aac6011044fbce11c194ecf553add69200902cc3",
+                "reference": "aac6011044fbce11c194ecf553add69200902cc3",
                 "shasum": ""
             },
             "require": {
@@ -3446,9 +3446,9 @@
             ],
             "support": {
                 "issues": "https://github.com/konradmichalik/php-doc-block-header-fixer/issues",
-                "source": "https://github.com/konradmichalik/php-doc-block-header-fixer/tree/0.3.5"
+                "source": "https://github.com/konradmichalik/php-doc-block-header-fixer/tree/0.4.0"
             },
-            "time": "2026-08-21T08:38:26+00:00"
+            "time": "2026-09-28T09:09:31+00:00"
         },
         {
             "name": "localheinz/diff",
