@@ -88,7 +88,7 @@ return Config::create()
 ;
 ```
 
-To apply the TYPO3 rules only, skip the `DefaultSet` and replace the rules instead of merging them:
+To apply the TYPO3 rules only, skip the `DefaultSet` and replace the rules instead of merging them. Without `merge: false`, the `@PSR12` rule set of PHP-CS-Fixer's own default config would stay active:
 
 ```php
 return Config::create(skipDefaultSet: true)
