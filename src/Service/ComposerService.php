@@ -22,7 +22,6 @@ use function array_map;
 use function count;
 use function ctype_digit;
 use function explode;
-use function file_exists;
 use function file_get_contents;
 use function is_array;
 use function is_int;
@@ -48,7 +47,7 @@ final class ComposerService
      */
     public static function readComposerJson(string $composerJsonPath = './composer.json'): array
     {
-        if (!file_exists($composerJsonPath)) {
+        if (!is_file($composerJsonPath)) {
             throw new RuntimeException(sprintf('Composer file not found at: %s', $composerJsonPath));
         }
 

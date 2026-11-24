@@ -16,7 +16,6 @@ namespace KonradMichalik\PhpCsFixerPreset\Tests\Package;
 use InvalidArgumentException;
 use KonradMichalik\PhpCsFixerPreset\Package\CopyrightRange;
 use PHPUnit\Framework\TestCase;
-use Stringable;
 
 /**
  * CopyrightRangeTest.
@@ -26,13 +25,6 @@ use Stringable;
  */
 final class CopyrightRangeTest extends TestCase
 {
-    public function testImplementsStringable(): void
-    {
-        $range = CopyrightRange::create();
-
-        self::assertInstanceOf(Stringable::class, $range);
-    }
-
     public function testCreateReturnsCurrentYearWithoutParameter(): void
     {
         $range = CopyrightRange::create();
@@ -121,7 +113,6 @@ final class CopyrightRangeTest extends TestCase
     {
         $range = CopyrightRange::create(2025);
 
-        self::assertInstanceOf(CopyrightRange::class, $range);
         self::assertNull($range->from);
         self::assertSame(2025, $range->to);
     }
@@ -130,7 +121,6 @@ final class CopyrightRangeTest extends TestCase
     {
         $range = CopyrightRange::from(2020, 2025);
 
-        self::assertInstanceOf(CopyrightRange::class, $range);
         self::assertSame(2020, $range->from);
         self::assertSame(2025, $range->to);
     }

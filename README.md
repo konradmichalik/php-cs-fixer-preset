@@ -67,7 +67,37 @@ return Config::create()
 > Pass `detectLicense: true` to `Header::fromComposer()` to render the license text for `GPL-2.0-or-later`, `GPL-3.0-or-later` and `proprietary` packages based on the `license` field in `composer.json`.
 
 > [!NOTE]
+> The default finder only matches PHP files, honors `.gitignore` and skips directories named `vendor` and `node_modules` at any depth. Adjust it with `withFinder()`.
+
+> [!NOTE]
 > `withRule()` and `RuleSet::add()` merge on rule level: a rule's configuration replaces any previous configuration of the same rule completely. Pass the full option set when overriding a configured rule.
+
+## 🧩 TYPO3
+
+`TYPO3RuleSet` applies the rules of [`typo3/coding-standards`](https://github.com/TYPO3/coding-standards), which has to be installed separately:
+
+```bash
+composer require typo3/coding-standards --dev
+```
+
+By default `Config::create()` starts with the `DefaultSet`, so the TYPO3 rules are merged on top of it and `@Symfony` and `@Symfony:risky` stay active:
+
+```php
+use KonradMichalik\PhpCsFixerPreset\Config;
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\TYPO3RuleSet;
+
+return Config::create()
+    ->withRule(TYPO3RuleSet::create())
+;
+```
+
+To apply the TYPO3 rules only, skip the `DefaultSet` and replace the rules instead of merging them. Without `merge: false`, the `@PSR12` rule set of PHP-CS-Fixer's own default config would stay active:
+
+```php
+return Config::create(skipDefaultSet: true)
+    ->withRule(TYPO3RuleSet::create(), merge: false)
+;
+```
 
 ## 🚫 Rejected rules
 

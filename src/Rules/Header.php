@@ -150,7 +150,7 @@ DEFAULT;
         }
 
         return implode(
-            \PHP_EOL,
+            "\n",
             array_map(static fn (Author $author): string => sprintf('%s %s', $prefix, $author), $this->packageAuthors),
         );
     }

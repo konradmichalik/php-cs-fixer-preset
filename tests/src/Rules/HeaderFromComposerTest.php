@@ -34,7 +34,6 @@ final class HeaderFromComposerTest extends TestCase
             CopyrightRange::from(2025),
         );
 
-        self::assertInstanceOf(Header::class, $header);
         self::assertSame('php-cs-fixer-preset', $header->packageName);
         self::assertSame(Type::ComposerPackage, $header->packageType);
         self::assertNotEmpty($header->packageAuthors);

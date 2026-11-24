@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules;
 
 use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, License, Type};
-use KonradMichalik\PhpCsFixerPreset\Rules\{Header, Rule};
+use KonradMichalik\PhpCsFixerPreset\Rules\Header;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,13 +25,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class HeaderTest extends TestCase
 {
-    public function testImplementsRuleInterface(): void
-    {
-        $header = Header::create('test/package', Type::ComposerPackage);
-
-        self::assertInstanceOf(Rule::class, $header);
-    }
-
     public function testCreateWithSingleAuthor(): void
     {
         $author = Author::create('John Doe', 'john@example.com');
