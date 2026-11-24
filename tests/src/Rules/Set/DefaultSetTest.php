@@ -152,6 +152,34 @@ final class DefaultSetTest extends TestCase
         self::assertTrue($rules['group_import']);
     }
 
+    public function testConfiguresPhpUnitTestCaseStaticMethodCallsToSelf(): void
+    {
+        $rules = (new PhpCsFixerRuleSet($this->defaultSet->get()))->getRules();
+
+        self::assertSame(['call_type' => 'self'], $rules['php_unit_test_case_static_method_calls']);
+    }
+
+    public function testEnablesFinalPublicMethodForAbstractClass(): void
+    {
+        $rules = (new PhpCsFixerRuleSet($this->defaultSet->get()))->getRules();
+
+        self::assertTrue($rules['final_public_method_for_abstract_class']);
+    }
+
+    public function testEnablesPhpUnitStrict(): void
+    {
+        $rules = (new PhpCsFixerRuleSet($this->defaultSet->get()))->getRules();
+
+        self::assertTrue($rules['php_unit_strict']);
+    }
+
+    public function testEnablesOctalNotation(): void
+    {
+        $rules = (new PhpCsFixerRuleSet($this->defaultSet->get()))->getRules();
+
+        self::assertTrue($rules['octal_notation']);
+    }
+
     public function testOrderedClassElementsHasCorrectOrder(): void
     {
         $rules = $this->defaultSet->get();

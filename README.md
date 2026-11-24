@@ -99,6 +99,26 @@ return Config::create(skipDefaultSet: true)
 ;
 ```
 
+## 🚫 Rejected rules
+
+Evaluated in a dry run over 24 repositories and left out of the `DefaultSet` on purpose:
+
+| Rule | Reason |
+| --- | --- |
+| `PedroTroller/useless_code_after_return` | Deletes live code after braceless `if (...) return;` |
+| `PhpCsFixerCustomFixers/no_nullable_boolean_type` | Breaks tri-state flags such as `?bool $flag = null` |
+| `strict_comparison`, `strict_param` | Change runtime behavior |
+| `mb_str_functions` | Byte semantics are intended in places |
+| `PhpCsFixerCustomFixers/isset_to_array_key_exists` | Different semantics for `null` values |
+| `PhpCsFixerCustomFixers/phpdoc_no_incorrect_var_annotation` | Removes `@var` narrowing that PHPStan relies on |
+| `PhpCsFixerCustomFixers/no_useless_dirname_call` | Turns `dirname(__DIR__, 3)` into `__DIR__.'/../../..'` |
+| `numeric_literal_separator` | Rewrites exception codes and breaks searching for them |
+| `PhpCsFixerCustomFixers/no_useless_comment` | Removes the summary lines added by `php-doc-block-header-fixer` |
+| `multiline_promoted_properties`, `string_implicit_backslashes` | Style churn without a defect behind it |
+| `ErickSkrauch/*`, `PedroTroller/line_break_between_method_arguments` | Layout only |
+
+`PhpCsFixerCustomFixers/typed_class_constant` requires PHP 8.3 and is deferred until it is the minimum version.
+
 ## 💎 Credits
 
 This project is highly inspired by the fabulous [php-cs-fixer-config](https://github.com/eliashaeussler/php-cs-fixer-config) package by [Elias Häußler](https://github.com/eliashaeussler).
