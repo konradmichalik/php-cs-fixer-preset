@@ -58,9 +58,6 @@ final class Config extends \PhpCsFixer\Config
 
         $config->setParallelConfig(Runner\Parallel\ParallelConfigFactory::detect());
 
-        // Remove this once dependencies declare support for PHP 8.5
-        $config->setUnsupportedPhpVersionAllowed(true);
-
         return $config;
     }
 
