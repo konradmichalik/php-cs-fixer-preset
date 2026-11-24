@@ -56,10 +56,10 @@ final class ComposerServiceTest extends TestCase
     {
         $tmpFile = tempnam(sys_get_temp_dir(), 'composer');
         file_put_contents($tmpFile, json_encode(['name' => 'vendor/package']));
-        chmod($tmpFile, 0000);
+        chmod($tmpFile, 0o000);
 
         if (false !== @file_get_contents($tmpFile)) {
-            chmod($tmpFile, 0644);
+            chmod($tmpFile, 0o644);
             unlink($tmpFile);
             self::markTestSkipped('Cannot reliably remove read permissions on this system');
         }
@@ -70,7 +70,7 @@ final class ComposerServiceTest extends TestCase
         try {
             @ComposerService::readComposerJson($tmpFile);
         } finally {
-            @chmod($tmpFile, 0644);
+            @chmod($tmpFile, 0o644);
             @unlink($tmpFile);
         }
     }

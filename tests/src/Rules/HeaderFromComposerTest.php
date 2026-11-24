@@ -248,11 +248,11 @@ final class HeaderFromComposerTest extends TestCase
         // We skip this test on such systems.
         $tmpFile = tempnam(sys_get_temp_dir(), 'composer');
         file_put_contents($tmpFile, json_encode(['name' => 'vendor/package']));
-        chmod($tmpFile, 0000); // Remove all permissions
+        chmod($tmpFile, 0o000); // Remove all permissions
 
         // Test if we can actually prevent reading (system dependent)
         if (false !== @file_get_contents($tmpFile)) {
-            chmod($tmpFile, 0644);
+            chmod($tmpFile, 0o644);
             unlink($tmpFile);
             self::markTestSkipped('Cannot reliably remove read permissions on this system');
         }
@@ -263,7 +263,7 @@ final class HeaderFromComposerTest extends TestCase
         try {
             @Header::fromComposer($tmpFile, CopyrightRange::from(2025));
         } finally {
-            @chmod($tmpFile, 0644); // Restore permissions for cleanup
+            @chmod($tmpFile, 0o644); // Restore permissions for cleanup
             @unlink($tmpFile);
         }
     }

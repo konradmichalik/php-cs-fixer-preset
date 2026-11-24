@@ -159,7 +159,7 @@ final class ConfigTest extends TestCase
         $targetConfig = Config::create();
         $targetConfig->withConfig($sourceConfig);
 
-        self::assertEquals(['single_quote' => true], $targetConfig->getRules());
+        self::assertSame(['single_quote' => true], $targetConfig->getRules());
         self::assertFalse($targetConfig->getRiskyAllowed());
         self::assertSame($sourceFinder, $targetConfig->getFinder());
     }

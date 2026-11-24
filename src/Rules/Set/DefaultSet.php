@@ -76,6 +76,12 @@ final readonly class DefaultSet implements Rule
             // @Symfony:risky configures this rule to remove strict types declarations
             'declare_strict_types' => true,
             'group_import' => true,
+            'php_unit_test_case_static_method_calls' => [
+                'call_type' => 'self',
+            ],
+            'final_public_method_for_abstract_class' => true,
+            'php_unit_strict' => true,
+            'octal_notation' => true,
         ];
     }
 }
