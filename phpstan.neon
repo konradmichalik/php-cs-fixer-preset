@@ -8,5 +8,3 @@ parameters:
 		- src
 		- tests/src
 	treatPhpDocTypesAsCertain: false
-	ignoreErrors:
-		- '#Call to static method PHPUnit\\Framework\\Assert::(assertInstanceOf|assertTrue|assertFalse|assertSame)\(\) with .* will always evaluate to true#'

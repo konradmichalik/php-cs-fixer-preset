@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
-use KonradMichalik\PhpCsFixerPreset\Rules\{Rule, Set\TYPO3RuleSet};
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\TYPO3RuleSet;
 use PHPUnit\Framework\TestCase;
 use TYPO3\CodingStandards\CsFixerConfig;
 
@@ -27,20 +27,6 @@ use function in_array;
  */
 final class TYPO3RuleSetTest extends TestCase
 {
-    public function testImplementsRuleInterface(): void
-    {
-        $ruleSet = TYPO3RuleSet::create();
-
-        self::assertInstanceOf(Rule::class, $ruleSet);
-    }
-
-    public function testCreateReturnsInstance(): void
-    {
-        $ruleSet = TYPO3RuleSet::create();
-
-        self::assertInstanceOf(TYPO3RuleSet::class, $ruleSet);
-    }
-
     public function testGetReturnsArray(): void
     {
         $ruleSet = TYPO3RuleSet::create();
