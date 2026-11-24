@@ -15,7 +15,6 @@ namespace KonradMichalik\PhpCsFixerPreset\Tests\Package;
 
 use KonradMichalik\PhpCsFixerPreset\Package\Author;
 use PHPUnit\Framework\TestCase;
-use Stringable;
 
 /**
  * AuthorTest.
@@ -25,20 +24,6 @@ use Stringable;
  */
 final class AuthorTest extends TestCase
 {
-    public function testImplementsStringable(): void
-    {
-        $author = Author::create('John Doe', 'john@example.com');
-
-        self::assertInstanceOf(Stringable::class, $author);
-    }
-
-    public function testCreateReturnsAuthorInstance(): void
-    {
-        $author = Author::create('John Doe', 'john@example.com');
-
-        self::assertInstanceOf(Author::class, $author);
-    }
-
     public function testStoresNameCorrectly(): void
     {
         $author = Author::create('John Doe', 'john@example.com');

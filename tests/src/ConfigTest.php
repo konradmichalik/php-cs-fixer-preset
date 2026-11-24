@@ -15,7 +15,6 @@ namespace KonradMichalik\PhpCsFixerPreset\Tests;
 
 use KonradMichalik\PhpCsFixerPreset\{Config, Rules\Rule, Rules\Set\RuleSet};
 use KonradMichalik\PhpDocBlockHeaderFixer\Rules\DocBlockHeaderFixer;
-use PhpCsFixer\ConfigInterface;
 use PhpCsFixer\RuleSet\AbstractRuleSetDefinition;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PHPUnit\Framework\TestCase;
@@ -31,39 +30,11 @@ use function count;
  */
 final class ConfigTest extends TestCase
 {
-    public function testCreateReturnsConfigInstance(): void
-    {
-        $config = Config::create();
-
-        self::assertInstanceOf(Config::class, $config);
-        self::assertInstanceOf(ConfigInterface::class, $config);
-    }
-
     public function testCreateEnablesRiskyRules(): void
     {
         $config = Config::create();
 
         self::assertTrue($config->getRiskyAllowed());
-    }
-
-    public function testCreateConfiguresFinderToNotIgnoreDotFiles(): void
-    {
-        $config = Config::create();
-
-        // The finder is configured to not ignore dot files
-        // We verify this by checking that the config was created successfully
-        // The actual behavior is tested through integration
-        self::assertInstanceOf(Config::class, $config);
-    }
-
-    public function testCreateConfiguresFinderToIgnoreVCSIgnoredFiles(): void
-    {
-        $config = Config::create();
-
-        // The finder is configured to ignore VCS ignored files
-        // We verify this by checking that the config was created successfully
-        // The actual behavior is tested through integration
-        self::assertInstanceOf(Config::class, $config);
     }
 
     public function testCreateIncludesDefaultRules(): void

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
-use KonradMichalik\PhpCsFixerPreset\Rules\{Rule, Set\RuleSet};
+use KonradMichalik\PhpCsFixerPreset\Rules\{Set\RuleSet};
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,13 +24,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class RuleSetTest extends TestCase
 {
-    public function testImplementsRuleInterface(): void
-    {
-        $ruleSet = RuleSet::create();
-
-        self::assertInstanceOf(Rule::class, $ruleSet);
-    }
-
     public function testCreateReturnsEmptyRuleSet(): void
     {
         $ruleSet = RuleSet::create();

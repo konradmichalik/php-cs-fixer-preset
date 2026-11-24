@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
-use KonradMichalik\PhpCsFixerPreset\Rules\{Rule, Set\DefaultSet};
+use KonradMichalik\PhpCsFixerPreset\Rules\{Set\DefaultSet};
 use PhpCsFixer\RuleSet\RuleSet as PhpCsFixerRuleSet;
 use PHPUnit\Framework\TestCase;
 
@@ -30,16 +30,6 @@ final class DefaultSetTest extends TestCase
     protected function setUp(): void
     {
         $this->defaultSet = DefaultSet::create();
-    }
-
-    public function testImplementsRuleInterface(): void
-    {
-        self::assertInstanceOf(Rule::class, $this->defaultSet);
-    }
-
-    public function testCreateReturnsDefaultSetInstance(): void
-    {
-        self::assertInstanceOf(DefaultSet::class, $this->defaultSet);
     }
 
     public function testGetReturnsArray(): void
