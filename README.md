@@ -69,6 +69,33 @@ return Config::create()
 > [!NOTE]
 > `withRule()` and `RuleSet::add()` merge on rule level: a rule's configuration replaces any previous configuration of the same rule completely. Pass the full option set when overriding a configured rule.
 
+## 🧩 TYPO3
+
+`TYPO3RuleSet` applies the rules of [`typo3/coding-standards`](https://github.com/TYPO3/coding-standards), which has to be installed separately:
+
+```bash
+composer require typo3/coding-standards --dev
+```
+
+By default `Config::create()` starts with the `DefaultSet`, so the TYPO3 rules are merged on top of it and `@Symfony` and `@Symfony:risky` stay active:
+
+```php
+use KonradMichalik\PhpCsFixerPreset\Config;
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\TYPO3RuleSet;
+
+return Config::create()
+    ->withRule(TYPO3RuleSet::create())
+;
+```
+
+To apply the TYPO3 rules only, skip the `DefaultSet` and replace the rules instead of merging them:
+
+```php
+return Config::create(skipDefaultSet: true)
+    ->withRule(TYPO3RuleSet::create(), merge: false)
+;
+```
+
 ## 💎 Credits
 
 This project is highly inspired by the fabulous [php-cs-fixer-config](https://github.com/eliashaeussler/php-cs-fixer-config) package by [Elias Häußler](https://github.com/eliashaeussler).
