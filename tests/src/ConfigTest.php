@@ -13,14 +13,19 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests;
 
+use FilesystemIterator;
 use KonradMichalik\PhpCsFixerPreset\{Config, Rules\Rule, Rules\Set\RuleSet};
 use KonradMichalik\PhpDocBlockHeaderFixer\Rules\DocBlockHeaderFixer;
 use PhpCsFixer\RuleSet\AbstractRuleSetDefinition;
 use PhpCsFixer\Runner\Parallel\ParallelConfig;
 use PHPUnit\Framework\TestCase;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 use function count;
+use function strlen;
 
 /**
  * ConfigTest.
@@ -250,5 +255,38 @@ final class ConfigTest extends TestCase
         $result = $config->withConfig($sourceConfig);
 
         self::assertSame($config, $result);
+    }
+
+    public function testCreateExcludesDependencyDirectoriesWithoutGitignore(): void
+    {
+        $root = sys_get_temp_dir().'/php-cs-fixer-preset-'.bin2hex(random_bytes(4));
+        foreach (['src/nested/vendor', 'vendor/acme', 'node_modules/acme', 'directory.php'] as $directory) {
+            mkdir($root.'/'.$directory, 0o777, true);
+        }
+        foreach (['src/Foo.php', 'src/nested/vendor/Qux.php', 'vendor/acme/Bar.php', 'node_modules/acme/Baz.php'] as $path) {
+            file_put_contents($root.'/'.$path, '<?php');
+        }
+
+        try {
+            $files = [];
+            $finder = Config::create()
+                ->withFinder(static fn (Finder $finder): Finder => $finder->in($root))
+                ->getFinder();
+            foreach ($finder as $file) {
+                $files[] = substr($file->getPathname(), strlen($root) + 1);
+            }
+        } finally {
+            $entries = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST,
+            );
+            /** @var SplFileInfo $entry */
+            foreach ($entries as $entry) {
+                $entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+            }
+            rmdir($root);
+        }
+
+        self::assertSame(['src/Foo.php'], $files);
     }
 }

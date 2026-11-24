@@ -52,9 +52,11 @@ final class Config extends \PhpCsFixer\Config
         }
 
         $config->setRiskyAllowed(true);
+        $config->finder->files();
         $config->finder->name('*.php');
         $config->finder->ignoreDotFiles(false);
         $config->finder->ignoreVCSIgnored(true);
+        $config->finder->exclude(['vendor', 'node_modules']);
 
         $config->setParallelConfig(Runner\Parallel\ParallelConfigFactory::detect());
 

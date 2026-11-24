@@ -67,6 +67,9 @@ return Config::create()
 > Pass `detectLicense: true` to `Header::fromComposer()` to render the license text for `GPL-2.0-or-later`, `GPL-3.0-or-later` and `proprietary` packages based on the `license` field in `composer.json`.
 
 > [!NOTE]
+> The default finder only matches PHP files, honors `.gitignore` and skips directories named `vendor` and `node_modules` at any depth. Adjust it with `withFinder()`.
+
+> [!NOTE]
 > `withRule()` and `RuleSet::add()` merge on rule level: a rule's configuration replaces any previous configuration of the same rule completely. Pass the full option set when overriding a configured rule.
 
 ## 💎 Credits
