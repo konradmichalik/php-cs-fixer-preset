@@ -289,10 +289,10 @@ final class ConfigTest extends TestCase
     public function testCreateExcludesDependencyDirectoriesWithoutGitignore(): void
     {
         $root = sys_get_temp_dir().'/php-cs-fixer-preset-'.bin2hex(random_bytes(4));
-        foreach (['src', 'vendor/acme', 'node_modules/acme', 'directory.php'] as $directory) {
+        foreach (['src/nested/vendor', 'vendor/acme', 'node_modules/acme', 'directory.php'] as $directory) {
             mkdir($root.'/'.$directory, 0o777, true);
         }
-        foreach (['src/Foo.php', 'vendor/acme/Bar.php', 'node_modules/acme/Baz.php'] as $path) {
+        foreach (['src/Foo.php', 'src/nested/vendor/Qux.php', 'vendor/acme/Bar.php', 'node_modules/acme/Baz.php'] as $path) {
             file_put_contents($root.'/'.$path, '<?php');
         }
 
