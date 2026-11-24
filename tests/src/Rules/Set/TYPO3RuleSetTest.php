@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
-use KonradMichalik\PhpCsFixerPreset\Rules\{Set\TYPO3RuleSet};
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\TYPO3RuleSet;
 use PHPUnit\Framework\TestCase;
 use TYPO3\CodingStandards\CsFixerConfig;
 

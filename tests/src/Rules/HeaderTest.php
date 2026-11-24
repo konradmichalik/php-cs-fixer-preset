@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules;
 
 use KonradMichalik\PhpCsFixerPreset\Package\{Author, CopyrightRange, License, Type};
-use KonradMichalik\PhpCsFixerPreset\Rules\{Header};
+use KonradMichalik\PhpCsFixerPreset\Rules\Header;
 use PHPUnit\Framework\TestCase;
 
 /**

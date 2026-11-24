@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace KonradMichalik\PhpCsFixerPreset\Tests\Rules\Set;
 
-use KonradMichalik\PhpCsFixerPreset\Rules\{Set\DefaultSet};
+use KonradMichalik\PhpCsFixerPreset\Rules\Set\DefaultSet;
 use PhpCsFixer\RuleSet\RuleSet as PhpCsFixerRuleSet;
 use PHPUnit\Framework\TestCase;
 
